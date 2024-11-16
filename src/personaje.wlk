@@ -1,4 +1,4 @@
-object pepita {
+object personaje {
   var energy = 100
 
   method energy() = energy
