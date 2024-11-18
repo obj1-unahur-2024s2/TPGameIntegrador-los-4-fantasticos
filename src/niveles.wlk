@@ -25,7 +25,7 @@ object juego {
 		game.addVisual(personaje)
 		game.onCollideDo(personaje, {objeto => objeto.colisionar()})
 	
-		presentacion.iniciar()
+		nivel1.iniciar() //deberia empezar con presentacion cuando funcione
 	}
 
 	method terminar() {
@@ -63,6 +63,8 @@ object juego {
 	//y evita los malos como bombas y espadas.
 	//Puedes moverte con las flechas hacia izquierda y derecha.
 	//Buena suerte pirata!"
+
+	// method textColor() = paleta.rojo()
 //}
 
 class Nivel {
