@@ -1,5 +1,6 @@
 import niveles.*
 import wollok.game.*
+import personaje.*
 
 program PirataGame {
 	juego.iniciar()

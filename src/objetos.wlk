@@ -24,6 +24,7 @@ class Objeto {
 class MonedaOro inherits Objeto  {
     override method image() = "moneda.png"
     override method colisionar () {
+        game.sound("sonidobueno.mp3").play()
         personaje.aumentarPuntos(5)
         game.removeVisual(self)
     }
@@ -31,6 +32,7 @@ class MonedaOro inherits Objeto  {
 class Cofre inherits Objeto {
     override method image() = "cofre.png"
     override method colisionar () {
+        game.sound("sonidobueno.mp3").play()
         personaje.aumentarPuntos(10)
         game.removeVisual(self)
     }
@@ -40,6 +42,7 @@ class GemaDeLosMares inherits Objeto {
     var seEstaMoviendoDerecha = true
     override method image() = "pirataDer1.png"//Buscar Imagen
     override method colisionar() {
+        game.sound("bonus.mp3").play()
       personaje.aumentarPuntos(10)
         game.removeVisual(self)
     }
@@ -68,6 +71,7 @@ class GemaDeLosMares inherits Objeto {
 class Bomba inherits Objeto { 
     override method image() = "bomba.png"
     override method colisionar() {
+        game.sound("danio.mp3").play()
         personaje.descontarVida(1)
         game.say(personaje, "Me quedan " + personaje.vidas() + " vidas")
         personaje.image("pirataDaño.png")
@@ -77,6 +81,7 @@ class Espada inherits Objeto {
     override method image() = "bomba.png"//Buscar imagen
     
     override method colisionar() {
+        game.sound("danio.mp3").play()
         personaje.disminuirPuntos(10)
         game.say(personaje, "He perdido 10 puntos")
         personaje.image("pirataDaño.png")
@@ -102,6 +107,7 @@ class Pulpo inherits Objeto {
     var seEstaMoviendoDerecha = false
     override method image() = "pulpo.png"
     override method colisionar() {
+        game.sound("danio.mp3").play()
       personaje.descontarVida(1)
         game.say(personaje, "Me quedan " + personaje.vidas() + " vidas")
         personaje.image("pirataDaño.png")
@@ -129,7 +135,8 @@ class Pulpo inherits Objeto {
 class AnclaOxidada inherits Objeto { 
     override method image() = "pirataIzq1.png"//buscar imagen
     override method colisionar() {
-        
+        game.sound("danio.mp3").play()
+
         personaje.image("pirataDaño.png")
     }
 }
