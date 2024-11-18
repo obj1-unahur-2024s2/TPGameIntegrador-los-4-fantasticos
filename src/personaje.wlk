@@ -3,7 +3,7 @@ import niveles.*
 
 object personaje {
   var vivo = true
-  var vidas = 5
+  var vidas = 3
   var puntos = 0
   var property position = game.at(0, 0)
   var property image = "pirataDer1.png"
@@ -19,8 +19,6 @@ object personaje {
   }
   method disminuirPuntos(cantidad) {
     puntos = 0.max(puntos-cantidad)
-    //if (juego.nivelActual().objetivoCumplido())
-    //juego.nivelActual().siguiente().iniciar()
   }
 
   method moverDerecha() {

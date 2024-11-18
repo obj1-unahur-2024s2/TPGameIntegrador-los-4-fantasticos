@@ -10,7 +10,7 @@ object config {
 		keyboard.p().onPressDo({puntaje.alternarPuntaje()})
 		/*keyboard.enter().onPressDo({if (not personaje.vivo())
 									juego.reiniciar()})
-		Averiguar como reinciar el juego cuando muere*/ //Agregue sugerencia en personaje.descontarVida()
+		Averiguar como reinciar el juego cuando muere*/ //Agregue sugerencia en terminar()
 	}
 }
 
@@ -76,9 +76,11 @@ object nivel2 inherits Nivel(siguiente=fin) {
 	override method iniciar() {
 		game.clear()//Con este clear borramos todo, tendriamos q encontrar otra forma de hacerlo,xq sino tenemos que hacer las config y todo devuelta
 		tituloLvlDos.mostrarTitulo()
+
 		config.configurarTeclas()
-		game.addVisual(personaje)//agregue esto asi tenemos al personaje, pero no podemos moverlo
+		game.addVisual(personaje)
 		game.onCollideDo(personaje, {objeto => objeto.colisionar()})
+
 		game.onTick(3000, "GenerarObjetosBuenos", {self.randomBuenos().aparecer()})//le subi el tiempo xq me explotaba la compu
 		game.onTick(5000, "GenerarObjetosMalos", {self.randomMalos().aparecer()})//le subi el tiempo xq me explotaba la compu
 	}
@@ -99,7 +101,7 @@ object nivel2 inherits Nivel(siguiente=fin) {
 }
 
 object fin{
-	method position() = game.center()
+	method position() = game.at(5,6)
 	method image() = "youWin.png"
 	method iniciar(){
 		game.stop()
@@ -108,7 +110,7 @@ object fin{
 }
 
 object gameOver {
-	method position() = game.origin()
+	method position() = game.at(3,3)
 	method image() = "gameOver.png"
 }
 //MODELADO DE PUNTAJE
@@ -117,7 +119,7 @@ object puntaje {
     method position()=game.at(18,19)
     method text()= "Puntaje: " + personaje.puntos() //Averiguar como cambiar el tamaño a los textos
     method textColor() = paleta.rojo()
-	method textSize() = 100
+	method fontSize() = 50
     method alternarPuntaje() {
         if (puntajeVisible) {
             game.removeVisual(self) 
@@ -133,7 +135,7 @@ object tituloLvlDos{
   method position() = game.at(10,18)
   method text() = "NIVEL 2"
   method textColor() = paleta.rojo()
-  method textSize() = 100//Averiguar como cambiar el tamaño a los textos
+  method fontSize() = 24//Averiguar como cambiar el tamaño a los textos
   method mostrarTitulo(){
 	game.addVisual(self)
 	game.onTick(100,"Eliminar Texto",{
