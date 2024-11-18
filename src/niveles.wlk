@@ -24,8 +24,8 @@ object juego {
 		config.configurarTeclas()
 		game.addVisual(personaje)
 		game.onCollideDo(personaje, {objeto => objeto.colisionar()})
-
-		nivel1.iniciar()
+	
+		nivel1.iniciar() //deberia empezar con presentacion cuando funcione
 	}
 
 	method terminar() {
@@ -44,6 +44,29 @@ object juego {
 	}
 }
 
+// object presentacion {
+	// method iniciar(){
+		//game.onTick(3000, "Presentacion1", game.say(personaje, "Bienvenidos al juego del pirata!"))
+		//game.onTick(4000, "Presentacion2", game.say(personaje, "Presiona enter para leer las instrucciones"))
+
+		//keyboard.enter().onPressDo { game.addVisual(texto) }
+		//game.onTick(6000, "", game.removeVisual(texto)) (no funciona)
+		//keyboard.enter().onPressDo { nivel1.iniciar() }
+	//}
+	
+//} 
+
+//object texto {
+//	method position() = game.center()
+
+	//method text() = "Recoge objetos buenos como monedas y cofres,
+	//y evita los malos como bombas y espadas.
+	//Puedes moverte con las flechas hacia izquierda y derecha.
+	//Buena suerte pirata!"
+
+	// method textColor() = paleta.rojo()
+//}
+
 class Nivel {
 	const property siguiente 
 
@@ -51,6 +74,7 @@ class Nivel {
 		//config.configurarTeclas()
 		//game.addVisual(personaje)
 		//game.onCollideDo(personaje, {objeto => objeto.colisionar()})
+
 		game.onTick(2000, "GenerarObjetosBuenos", {self.randomBuenos().aparecer()})
 		game.onTick(3500, "GenerarObjetosMalos", {self.randomMalos().aparecer()})
 	}
