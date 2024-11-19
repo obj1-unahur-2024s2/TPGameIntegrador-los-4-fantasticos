@@ -43,7 +43,7 @@ class GemaDeLosMares inherits Objeto {
     override method image() = "pirataDer1.png"//Buscar Imagen
     override method colisionar() {
         game.sound("bonus.mp3").play()
-      personaje.aumentarPuntos(10)
+        personaje.aumentarPuntos(10)
         game.removeVisual(self)
     }
     override method caer(){
@@ -108,7 +108,7 @@ class Pulpo inherits Objeto {
     override method image() = "pulpo.png"
     override method colisionar() {
         game.sound("danio.mp3").play()
-      personaje.descontarVida(1)
+        personaje.descontarVida(1)
         game.say(personaje, "Me quedan " + personaje.vidas() + " vidas")
         personaje.image("pirataDaño.png")
     }

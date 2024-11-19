@@ -91,6 +91,7 @@ class Nivel {
 		objMalos.get(0.randomUpTo(objMalos.size()))
 	}
 	method objetivoCumplido()
+	
 }
 object nivel1 inherits Nivel(siguiente=nivel2){
 	override method objetivoCumplido() = personaje.puntos() >= 30 //tiene que ser >= y no == ya que si agarramos una moneda nos podemos pasar
