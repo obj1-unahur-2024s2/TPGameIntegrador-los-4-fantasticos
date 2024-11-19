@@ -93,6 +93,7 @@ class Nivel {
 	}
 
 	method objetivoCumplido()
+	
 }
 
 object nivel1 inherits Nivel(siguiente=nivel2){
