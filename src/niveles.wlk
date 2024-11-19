@@ -1,16 +1,14 @@
 import wollok.game.*
-import personaje.*
+import pirata.*
 import objetos.*
+import visuales.*
 
 object config {
 	method configurarTeclas() {
-		keyboard.left().onPressDo({personaje.moverIzquierda()})
-		keyboard.right().onPressDo({personaje.moverDerecha()})
-		keyboard.space().onPressDo({game.stop()})
-		keyboard.p().onPressDo({puntaje.alternarPuntaje()})
-		/*keyboard.enter().onPressDo({if (not personaje.vivo())
-									juego.reiniciar()})
-		Averiguar como reinciar el juego cuando muere*/ //Agregue sugerencia en terminar()
+		keyboard.left().onPressDo({pirata.moverIzquierda()})
+		keyboard.right().onPressDo({pirata.moverDerecha()})
+		keyboard.space().onPressDo({game.stop()
+									juego.nivelActual().musica().stop()})
 	}
 }
 
@@ -20,159 +18,123 @@ object juego {
 		game.title("Pirata")
 		game.height(20)
 		game.width(20)
-		game.boardGround("playa.jpeg")
+		game.boardGround("playa.png")
 		config.configurarTeclas()
-		game.addVisual(personaje)
-		game.onCollideDo(personaje, {objeto => objeto.colisionar()})
-	
-		nivel1.iniciar() //deberia empezar con presentacion cuando funcione
+		inicio.iniciar()
 	}
-
 	method terminar() {
-		game.stop()
+		nivelActual.pararMusica()
+		game.sound("gameOver.mp3").play()
 		game.clear()
-		game.addVisual(personaje)
-		game.say(personaje, ":c")
+		game.addVisual(pirata)
 		game.addVisual(gameOver)
-		//game.onTick(4000,"Reiniciar Juego", {self.reiniciar()}) //eso para reiniciar el juego luego de 4seg de morirse?
+		game.schedule(8000,{self.reiniciar()}) 
 	}
 
 	method reiniciar() {
 		game.clear()
+		pirata.sumarVida(3)
 		nivel1.iniciar()
-		game.start()
 	}
 }
 
-// object presentacion {
-	// method iniciar(){
-		//game.onTick(3000, "Presentacion1", game.say(personaje, "Bienvenidos al juego del pirata!"))
-		//game.onTick(4000, "Presentacion2", game.say(personaje, "Presiona enter para leer las instrucciones"))
+object inicio {
+	var image = "inicio1.png"
+	method image() = image
+	method position() = game.origin()
 
-		//keyboard.enter().onPressDo { game.addVisual(texto) }
-		//game.onTick(6000, "", game.removeVisual(texto)) (no funciona)
-		//keyboard.enter().onPressDo { nivel1.iniciar() }
-	//}
-	
-//} 
-
-//object texto {
-//	method position() = game.center()
-
-	//method text() = "Recoge objetos buenos como monedas y cofres,
-	//y evita los malos como bombas y espadas.
-	//Puedes moverte con las flechas hacia izquierda y derecha.
-	//Buena suerte pirata!"
-
-	// method textColor() = paleta.rojo()
-//}
+	method iniciar() {
+		game.addVisual(self)
+		game.schedule(10000, {	game.removeVisual(self)
+								image = "inicio2.png"
+								game.addVisual(self)})
+		game.schedule(20000, {	game.removeVisual(self)
+								nivel1.iniciar()})
+	}
+}
 
 class Nivel {
 	const property siguiente 
-
+	const property musica = game.sound("lvl1.mp3")
 	method iniciar(){
-		//config.configurarTeclas()
-		//game.addVisual(personaje)
-		//game.onCollideDo(personaje, {objeto => objeto.colisionar()})
-
-		game.onTick(2000, "GenerarObjetosBuenos", {self.randomBuenos().aparecer()})
-		game.onTick(3500, "GenerarObjetosMalos", {self.randomMalos().aparecer()})
+		pirata.puntos(0)
+		new Titulo().parpadear()
+		self.prepararNivel()
+		game.onTick(1500, "GenerarObjetos", {self.randomObjetos().aparecer()})
+	}
+	method reproducirMusica(){
+		musica.shouldLoop(true)
+		musica.volume(0.5)
+		musica.play()
 	}
 
-	method randomBuenos() {
-		const objBuenos = [new MonedaOro(), new Cofre()]
+	method prepararNivel(){
+		juego.nivelActual(self)
+		self.reproducirMusica()
+		game.addVisual(vidas)
+		game.addVisual(puntaje)
+		config.configurarTeclas()
+		game.addVisual(pirata)
+		game.onCollideDo(pirata, {objeto => objeto.colisionar()})
+	}
+
+	method pararMusica(){
+		musica.stop()
+	}
+
+	method randomObjetos() {
+		const objetos = [new MonedaOro(lentitud = 300), new MonedaOro(lentitud = 300), new MonedaOro(lentitud = 300), new MonedaOro(lentitud = 300), new MonedaOro(lentitud = 300), new MonedaOro(lentitud = 300), /* 60% */
+    					new Cofre(lentitud = 400), new Cofre(lentitud = 400), new Cofre(lentitud = 400), /* 25% */
+    					new Bomba(lentitud = 250), new Bomba(lentitud = 250), /* 10% */
+    					new Espada(lentitud = 350)] /* 5% */
 		return
-		objBuenos.get(0.randomUpTo(objBuenos.size()))
+		objetos.get(0.randomUpTo(objetos.size()))
 	}
 
-	method randomMalos() {
-		const objMalos = [new Bomba(), new Espada()]
-		return
-		objMalos.get(0.randomUpTo(objMalos.size()))
-	}
 	method objetivoCumplido()
 	
 }
+
 object nivel1 inherits Nivel(siguiente=nivel2){
-	override method objetivoCumplido() = personaje.puntos() >= 30 //tiene que ser >= y no == ya que si agarramos una moneda nos podemos pasar
+	override method objetivoCumplido() = pirata.puntos() >= 40
 }
 
-object nivel2 inherits Nivel(siguiente=fin) {
+object nivel2 inherits Nivel(siguiente=fin, musica=game.sound("lvl2.mp3")) {
 	override method iniciar() {
-		game.clear()//Con este clear borramos todo, tendriamos q encontrar otra forma de hacerlo,xq sino tenemos que hacer las config y todo devuelta
-		tituloLvlDos.mostrarTitulo()
-
-		config.configurarTeclas()
-		game.addVisual(personaje)
-		game.onCollideDo(personaje, {objeto => objeto.colisionar()})
-
-		game.onTick(3000, "GenerarObjetosBuenos", {self.randomBuenos().aparecer()})//le subi el tiempo xq me explotaba la compu
-		game.onTick(5000, "GenerarObjetosMalos", {self.randomMalos().aparecer()})//le subi el tiempo xq me explotaba la compu
+		game.clear()
+		titulo2.parpadear()
+		nivel1.pararMusica()
+		self.prepararNivel()
+		game.onTick(1000, "GenerarObjetos", {self.randomObjetos().aparecer()})
 	}
 
-	override method randomBuenos() {
-		const objBuenos = [new MonedaOro(velocidad=700), new Cofre(),new GemaDeLosMares()]
+	override method randomObjetos() {
+		const objBuenos = [	new MonedaOro(lentitud = 250), new MonedaOro(lentitud = 250), new MonedaOro(lentitud = 250), new MonedaOro(lentitud = 250), /* 40% */
+   							new Cofre(lentitud = 350), new Cofre(lentitud = 350), /* 20% */
+    						new Perla(lentitud = 200), /* 5% */
+   							new Bomba(lentitud = 200), new Bomba(lentitud = 200), new Bomba(lentitud = 200), new Bomba(lentitud = 200), /* 20% */
+    						new Espada(lentitud = 300), new Espada(lentitud = 300), /* 10% */
+    						new Pulpo(lentitud = 250)] /* 5% */
 		return
 		objBuenos.get(0.randomUpTo(objBuenos.size()))
 	}
 
-	override method randomMalos() {
-		const objMalos = [new Bomba(velocidad=700), new Pulpo(), new Espada()]
-		return
-		objMalos.get(0.randomUpTo(objMalos.size()))
-	}
-
-	override method objetivoCumplido() = personaje.puntos() >= 50
+	override method objetivoCumplido() = pirata.puntos() >= 100
 }
 
 object fin{
 	method position() = game.at(5,6)
 	method image() = "youWin.png"
 	method iniciar(){
-		game.stop()
+		juego.nivelActual(self)
+		nivel2.pararMusica()
+		game.sound("victory.mp3").play()
+		game.clear()
 		game.addVisual(self)
+		game.schedule(10000, {
+			game.clear()
+			nivel1.iniciar()})
 	}
 }
 
-object gameOver {
-	method position() = game.at(3,3)
-	method image() = "gameOver.png"
-}
-//MODELADO DE PUNTAJE
-object puntaje {
-    var puntajeVisible = false 
-    method position()=game.at(18,19)
-    method text()= "Puntaje: " + personaje.puntos() //Averiguar como cambiar el tamaño a los textos
-    method textColor() = paleta.rojo()
-	method fontSize() = 50
-    method alternarPuntaje() {
-        if (puntajeVisible) {
-            game.removeVisual(self) 
-        } else {
-            game.addVisual(self) 
-        }
-        puntajeVisible = not puntajeVisible 
-    }
-}
-//MODELADO TITULO DE NIVEL DOS
-object tituloLvlDos{
-  var tiempo = 100
-  method position() = game.at(10,18)
-  method text() = "NIVEL 2"
-  method textColor() = paleta.rojo()
-  method fontSize() = 24//Averiguar como cambiar el tamaño a los textos
-  method mostrarTitulo(){
-	game.addVisual(self)
-	game.onTick(100,"Eliminar Texto",{
-		tiempo -=1
-		if(tiempo<=0){
-			game.removeVisual(self)
-		}
-	})
-  }
-}
-object paleta {
-  const property verde = "00FF00FF"
-  const property rojo = "FF0000FF"
-  //agregar mas colores o colores mas lindos
-}
+
