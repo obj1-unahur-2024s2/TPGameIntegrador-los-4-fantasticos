@@ -84,6 +84,7 @@ class Nivel {
 	}
 
 	method randomObjetos() {
+		//Manejo Probabilidad por lista
 		const objetos = [new MonedaOro(lentitud = 300), new MonedaOro(lentitud = 300), new MonedaOro(lentitud = 300), new MonedaOro(lentitud = 300), new MonedaOro(lentitud = 300), new MonedaOro(lentitud = 300), /* 60% */
     					new Cofre(lentitud = 400), new Cofre(lentitud = 400), new Cofre(lentitud = 400), /* 25% */
     					new Bomba(lentitud = 250), new Bomba(lentitud = 250), /* 10% */
@@ -110,6 +111,7 @@ object nivel2 inherits Nivel(siguiente=fin, musica=game.sound("lvl2.mp3")) {
 	}
 
 	override method randomObjetos() {
+		//Manejo Probabilidad por lista
 		const objBuenos = [	new MonedaOro(lentitud = 250), new MonedaOro(lentitud = 250), new MonedaOro(lentitud = 250), new MonedaOro(lentitud = 250), /* 40% */
    							new Cofre(lentitud = 350), new Cofre(lentitud = 350), /* 20% */
     						new Perla(lentitud = 200), /* 5% */

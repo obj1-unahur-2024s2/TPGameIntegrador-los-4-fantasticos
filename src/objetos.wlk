@@ -43,7 +43,7 @@ class Perla inherits Objeto {
     override method image() = "perla.png"
     override method colisionar() {
         game.sound("bonus.mp3").play()
-        pirata.aumentarPuntos(10)
+        pirata.sumarVida(1)
         game.removeVisual(self)
     }
     override method caer(){
@@ -90,7 +90,7 @@ class Espada inherits Objeto {
             position = game.at(position.x()+1, position.y() - 1)
             if (position.y() < 0) { 
             game.removeVisual(self)
-            } else if (position.x() > game.width()) { // le agregue el efecto pacman 
+            } else if (position.x() > game.width()) { 
             position = game.at(0, position.y())
             }
         }) 
@@ -102,7 +102,7 @@ class Pulpo inherits Objeto {
     override method image() = "pulpo.png"
     override method colisionar() {
         game.sound("daño.mp3").play()
-        pirata.descontarVida(1)
+        pirata.descontarVida(2)
         pirata.image("pirataDaño.png")
     }
     override method caer(){
