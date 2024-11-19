@@ -66,4 +66,4 @@
 
 - Universidad Nacional de Hurlingham
 - Versión de wollok
-- Una vez terminado, no tenemos problemas en que el repositorio sea público / queremos manternerlo privado
+- Una vez terminado, no tenemos problemas en que el repositorio sea público 
