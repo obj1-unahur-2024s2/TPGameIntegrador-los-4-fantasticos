@@ -17,7 +17,7 @@ object gameOver {
 }
 
 class Titulo {
-	const image = "nivelUnoChico.png"
+	const image = "nivel1.png"
 	method image() = image
 	method position() = game.at(0, 7)
 	method parpadear() {
@@ -28,4 +28,4 @@ class Titulo {
 							game.removeVisual(self)})
 	}
 }
-object titulo2 inherits Titulo(image="nivelDosChico.png"){}
+object titulo2 inherits Titulo(image="nivel2.png"){}

@@ -43,11 +43,7 @@ class Perla inherits Objeto {
     override method image() = "perla.png"
     override method colisionar() {
         game.sound("bonus.mp3").play()
-<<<<<<< HEAD
-        personaje.aumentarPuntos(10)
-=======
         pirata.aumentarPuntos(10)
->>>>>>> 495bf01e9256378d2672880cfb0a75e4ce3dabd4
         game.removeVisual(self)
     }
     override method caer(){
@@ -105,16 +101,9 @@ class Pulpo inherits Objeto {
     var seEstaMoviendoDerecha = false
     override method image() = "pulpo.png"
     override method colisionar() {
-<<<<<<< HEAD
-        game.sound("danio.mp3").play()
-        personaje.descontarVida(1)
-        game.say(personaje, "Me quedan " + personaje.vidas() + " vidas")
-        personaje.image("pirataDaño.png")
-=======
         game.sound("daño.mp3").play()
         pirata.descontarVida(1)
         pirata.image("pirataDaño.png")
->>>>>>> 495bf01e9256378d2672880cfb0a75e4ce3dabd4
     }
     override method caer(){
         game.onTick(self.lentitud(),"PulpoCayendo",{
