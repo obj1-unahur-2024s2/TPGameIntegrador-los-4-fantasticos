@@ -1,21 +1,21 @@
-import personaje.*
+import pirata.*
 import wollok.game.*
 class Objeto {
     var property position = game.at(0.randomUpTo(game.width()-1), game.height()-1)
-    var velocidad =300
+    var lentitud = 300
 
     method image()
     method colisionar() 
-    method velocidad() = velocidad
-    method aumentarVelocidadEn(unaCantidad) {
-      velocidad +=unaCantidad
+    method lentitud() = lentitud
+    method aumentarlentitudEn(unaCantidad) {
+      lentitud +=unaCantidad
     } 
     method aparecer() {
         game.addVisual(self)
         self.caer()
     }
     method caer() {
-        game.onTick(self.velocidad(), "objetoCayendo",{position = game.at(position.x(),position.y()-1)
+        game.onTick(self.lentitud(), "objetoCayendo",{position = game.at(position.x(),position.y()-1)
                                         if (position.y()<0) game.removeVisual(self)})
     }
 }
@@ -25,7 +25,7 @@ class MonedaOro inherits Objeto  {
     override method image() = "moneda.png"
     override method colisionar () {
         game.sound("sonidobueno.mp3").play()
-        personaje.aumentarPuntos(5)
+        pirata.aumentarPuntos(5)
         game.removeVisual(self)
     }
 }
@@ -33,22 +33,22 @@ class Cofre inherits Objeto {
     override method image() = "cofre.png"
     override method colisionar () {
         game.sound("sonidobueno.mp3").play()
-        personaje.aumentarPuntos(10)
+        pirata.aumentarPuntos(10)
         game.removeVisual(self)
     }
 }
 
-class GemaDeLosMares inherits Objeto {
+class Perla inherits Objeto {
     var seEstaMoviendoDerecha = true
-    override method image() = "pirataDer1.png"//Buscar Imagen
+    override method image() = "perla.png"
     override method colisionar() {
         game.sound("bonus.mp3").play()
-      personaje.aumentarPuntos(10)
+        pirata.aumentarPuntos(10)
         game.removeVisual(self)
     }
     override method caer(){
-        game.onTick(self.velocidad(),"GemaCayendo",{
-            self.aumentarVelocidadEn(100)
+        game.onTick(self.lentitud(),"GemaCayendo",{
+            self.aumentarlentitudEn(100)
             if(seEstaMoviendoDerecha){
                 position = game.at(position.x() + 1, position.y() - 1)
             }
@@ -71,49 +71,42 @@ class GemaDeLosMares inherits Objeto {
 class Bomba inherits Objeto { 
     override method image() = "bomba.png"
     override method colisionar() {
-        game.sound("danio.mp3").play()
-        personaje.descontarVida(1)
-        game.say(personaje, "Me quedan " + personaje.vidas() + " vidas")
-        personaje.image("pirataDaño.png")
+        game.sound("daño.mp3").play()
+        pirata.descontarVida(1)
+        pirata.image("pirataDaño.png")
     }
 }
 class Espada inherits Objeto { 
-    override method image() = "bomba.png"//Buscar imagen
+    override method image() = "espada.png"
     
     override method colisionar() {
-        game.sound("danio.mp3").play()
-        personaje.disminuirPuntos(10)
-        game.say(personaje, "He perdido 10 puntos")
-        personaje.image("pirataDaño.png")
+        game.sound("daño.mp3").play()
+        pirata.disminuirPuntos(10)
+        pirata.image("pirataDaño.png")
     }
     
     override method caer(){
-        game.onTick(self.velocidad(), "EspadaCayendo", {
-            position = game.at(position.x() + 1, position.y() - 1)
-
+        game.onTick(self.lentitud(), "EspadaCayendo", {
+            position = game.at(position.x()+1, position.y() - 1)
             if (position.y() < 0) { 
             game.removeVisual(self)
             } else if (position.x() > game.width()) { // le agregue el efecto pacman 
             position = game.at(0, position.y())
             }
         }) 
-    }
-    
-    
-    
+    }  
 }
 
 class Pulpo inherits Objeto {
     var seEstaMoviendoDerecha = false
     override method image() = "pulpo.png"
     override method colisionar() {
-        game.sound("danio.mp3").play()
-      personaje.descontarVida(1)
-        game.say(personaje, "Me quedan " + personaje.vidas() + " vidas")
-        personaje.image("pirataDaño.png")
+        game.sound("daño.mp3").play()
+        pirata.descontarVida(1)
+        pirata.image("pirataDaño.png")
     }
     override method caer(){
-        game.onTick(self.velocidad(),"PulpoCayendo",{
+        game.onTick(self.lentitud(),"PulpoCayendo",{
             
             if(seEstaMoviendoDerecha){
                 position = game.at(position.x() + 1, position.y() - 1)
@@ -132,31 +125,3 @@ class Pulpo inherits Objeto {
         })
     }
 }
-class AnclaOxidada inherits Objeto { 
-    override method image() = "pirataIzq1.png"//buscar imagen
-    override method colisionar() {
-        game.sound("danio.mp3").play()
-
-        personaje.image("pirataDaño.png")
-    }
-}
-
-
-/*
- else if (position.x() < 0) { // Si sale por la izquierda, reaparece por la derecha
-            position = game.at(game.width(), position.y())
-        }
-
-
-
-override method caerr() {
-    game.onTick(300, "objetoCayendo", {
-        position = game.at(position.x() + 1, position.y() - 1) // Cambia tanto en x como en y
-        if (position.y() < 0 || position.x() > game.width()) { // Si se sale de la pantalla
-            game.removeVisual(self)
-        }
-    })
-     position = if (position.x() == game.width()) {game.at(0,position.y())}
-    else {game.at(position.x()+1,position.y())}
-    }
-*/
