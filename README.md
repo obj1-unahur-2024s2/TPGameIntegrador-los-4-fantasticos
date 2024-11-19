@@ -5,6 +5,7 @@
 - Franco Colombano
 - Ramiro Casablancas
 - Martina Movia
+- Diego Schefer
 
 ## Capturas
 
