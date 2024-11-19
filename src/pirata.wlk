@@ -2,11 +2,10 @@ import wollok.game.*
 import niveles.*
 
 object pirata {
-  var vidas = 3
+  var property vidas = 3
   var property puntos = 0
   var property position = game.at(0, 0)
   var property image = "pirataDer1.png"
-  method vidas() = vidas
   method image() = image
   method vivo() = vidas > 0
 

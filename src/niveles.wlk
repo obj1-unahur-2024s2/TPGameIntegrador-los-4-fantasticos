@@ -57,7 +57,8 @@ class Nivel {
 	const property siguiente 
 	const property musica = game.sound("lvl1.mp3")
 	method iniciar(){
-		pirata.puntos(0)
+		pirata.puntos(0) 
+		pirata.vidas(3)
 		new Titulo().parpadear()
 		self.prepararNivel()
 		game.onTick(1500, "GenerarObjetos", {self.randomObjetos().aparecer()})

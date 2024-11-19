@@ -5,4 +5,4 @@ import pirata.*
 program PirataGame {
 	juego.iniciar()
 	game.start()
-}	 
+}	  
